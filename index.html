@@ -1,0 +1,1068 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ModuPack, le carton qui s'ajuste à vos produits</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#ffffff;
+  --kraft:#A8743F;
+  --kraft-soft:#F1F1F0;
+  --kraft-deep:#6B4A2B;
+  --ink:#1E1E1E;
+  --ink-soft:#5A534B;
+  --rule:#E2E2E0;
+  --cut:#B5452F;     /* ligne de coupe */
+  --fold:#2E6B4E;    /* ligne de pli */
+  --ok:#2E6B4E;
+  --ok-soft:#E2EDE5;
+  --ko-soft:#F6E1DA;
+  --f:"Instrument Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --h:"Bricolage Grotesque","Arial Narrow",system-ui,sans-serif;
+  --hand:"Caveat","Comic Sans MS",cursive;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+body{font-family:var(--f);color:var(--ink);background:var(--paper);font-size:17px;line-height:1.55}
+.hand{font-family:var(--hand);font-weight:600;font-size:1.45rem;line-height:1.1;color:var(--fold)}
+.prose{display:grid;grid-template-columns:1fr 1fr;gap:20px 48px;margin-top:40px;padding-top:28px;border-top:2px solid var(--ink)}
+.prose p{color:var(--ink-soft)}
+.prose p strong{color:var(--ink)}
+.note-hand{position:absolute;right:18px;top:-18px;transform:rotate(-4deg);background:var(--paper);padding:0 6px}
+.letter{background:#FFFCF6;border:1px solid var(--rule);border-radius:3px;padding:30px 32px;box-shadow:0 1px 0 var(--rule),0 12px 24px -18px rgba(30,30,30,.4);transform:rotate(.6deg)}
+.letter p{font-size:1.02rem;margin-bottom:14px;color:#2A2724}
+.letter .sig{font-family:var(--hand);font-size:1.7rem;color:var(--ink);margin:6px 0 0}
+@media (max-width:900px){.prose{grid-template-columns:1fr}}
+.view{display:none}
+.view.on{display:block}
+.w{max-width:1140px;margin:0 auto;padding:0 24px}
+h1,h2,h3,.brand,.big,.price,.prices td.p,.fmt b,.step::before,.kpis b,.year b,.pct,.detail figcaption b,.btn{}
+h1,h2,h3{font-weight:800;line-height:1.08;letter-spacing:-.02em}
+.xw{}
+.nw{}
+p{max-width:62ch}
+a{color:inherit}
+button{font:inherit;cursor:pointer}
+:focus-visible{outline:3px solid var(--fold);outline-offset:2px}
+
+/* barre du haut */
+.top{position:sticky;top:0;z-index:20;background:var(--paper);border-bottom:2px solid var(--ink)}
+.top .w{display:flex;align-items:center;justify-content:space-between;height:64px;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.25rem;text-decoration:none}
+.brand svg{flex:none}
+.top nav{display:flex;gap:4px;align-items:center}
+.tab{background:none;border:0;padding:8px 14px;border-radius:4px;font-weight:600;color:var(--ink-soft);text-decoration:none}
+.tab:hover{color:var(--ink)}
+.tab[aria-current="page"]{color:var(--ink);box-shadow:inset 0 -3px 0 var(--kraft)}
+.btn{display:inline-flex;align-items:center;gap:8px;background:var(--ink);color:#fff;border:2px solid var(--ink);border-radius:6px;padding:11px 16px;font-weight:600;text-decoration:none;font-size:.94rem}
+.btn:hover{background:#3A3632}
+.btn.line{background:transparent;color:var(--ink)}
+.btn.line:hover{background:var(--kraft-soft)}
+.btn.kraft{background:var(--kraft);border-color:var(--kraft);color:var(--ink)}
+.btn.kraft:hover{background:#BD8A52}
+
+/* HERO */
+.hero{background:var(--kraft);position:relative;overflow:hidden;border-bottom:2px solid var(--ink)}
+.hero::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(107,74,43,.08) 0 2px,transparent 2px 7px);pointer-events:none}
+.hero .w{position:relative;display:grid;grid-template-columns:1fr 1.05fr;gap:40px;align-items:center;padding-top:64px;padding-bottom:64px}
+.hero h1{font-size:clamp(2.5rem,5.2vw,4.4rem);font-weight:800;letter-spacing:-.02em;line-height:1.05;margin-bottom:22px}
+.hero h1 span{display:block}
+.hero p{font-size:1.2rem;margin-bottom:30px;color:#1E1E1E}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap}
+.law{display:inline-flex;align-items:center;gap:10px;background:var(--paper);border:2px solid var(--ink);border-radius:99px;padding:6px 14px 6px 6px;font-weight:600;font-size:.9rem;margin-bottom:26px}
+.law b{background:var(--ink);color:#fff;border-radius:99px;padding:3px 10px;font-weight:700}
+.dieline{background:var(--paper);border:2px solid var(--ink);border-radius:6px;padding:18px 18px 12px;box-shadow:8px 8px 0 var(--kraft-deep)}
+.dieline svg{width:100%;height:auto;display:block}
+.legend{display:flex;gap:20px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-soft);margin-top:10px}
+.legend i{display:inline-block;width:26px;height:0;border-top:2px solid var(--cut);vertical-align:middle;margin-right:6px}
+.legend i.f{border-top:2px dashed var(--fold)}
+.draw .cutline{stroke-dasharray:var(--len,1200);stroke-dashoffset:var(--len,1200);animation:draw 1.6s cubic-bezier(.6,.1,.3,1) forwards}
+.draw .folds{opacity:0;animation:fade .6s 1.1s forwards}
+@keyframes draw{to{stroke-dashoffset:0}}
+.fadein{opacity:0;animation:fade .5s 1.9s forwards}
+@keyframes fade{to{opacity:1}}
+
+/* sections */
+.sec{padding:96px 0;border-bottom:1px solid var(--rule)}
+.sec h2{font-size:clamp(2rem,4vw,3.1rem);margin-bottom:16px;max-width:20ch}
+.sec .intro{font-size:1.12rem;color:var(--ink-soft);margin-bottom:48px}
+
+/* problème : comparaison à l'échelle */
+.compare{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.cmp{border:2px solid var(--ink);border-radius:6px;padding:26px;position:relative}
+.cmp.good{background:#fff;border-color:var(--ok);box-shadow:inset 0 6px 0 var(--ok)}
+.cmp h3{font-size:1.25rem;margin-bottom:4px}
+.cmp .sub{color:var(--ink-soft);font-size:.95rem;margin-bottom:12px}
+.cmp svg{width:100%;height:220px}
+.big{font-size:3.4rem;font-weight:800;line-height:1}
+.cmp .big{color:var(--cut)}
+.cmp.good .big{color:var(--ok)}
+.costs{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin-top:44px;border-top:2px solid var(--ink)}
+.costs div{padding:22px 24px 0 0}
+.costs div+div{padding-left:24px;border-left:1px solid var(--rule)}
+.costs h3{font-size:1.1rem;margin-bottom:6px}
+.costs p{color:var(--ink-soft);font-size:.98rem}
+
+/* formats */
+.formats{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border:2px solid var(--ink);border-radius:6px;overflow:hidden}
+.fmt{padding:22px 18px;border-right:1px solid var(--rule);background:var(--paper)}
+.fmt:last-child{border-right:0}
+.fmt svg{width:100%;height:150px;display:block;margin-bottom:12px}
+.fmt b{display:block;font-size:1.5rem;font-weight:800}
+.fmt span{color:var(--ink-soft);font-size:.92rem}
+.fmt em{display:block;font-style:normal;margin-top:8px;font-size:.92rem}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;margin-top:56px}
+.feats h3{font-size:1.15rem;margin-bottom:8px;padding-top:14px;border-top:3px solid var(--kraft)}
+.feats p{color:var(--ink-soft);font-size:.98rem}
+
+/* étapes */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s}
+.step{padding:0 22px 0 0;position:relative}
+.step+.step{padding-left:22px;border-left:1px dashed var(--fold)}
+.step::before{counter-increment:s;content:counter(s);display:block;font-size:3rem;font-weight:800;color:var(--kraft);line-height:1;margin-bottom:12px}
+.step h3{font-size:1.1rem;margin-bottom:6px}
+.step p{color:var(--ink-soft);font-size:.96rem}
+
+/* cibles */
+.who{display:grid;grid-template-columns:1.2fr 1fr;gap:56px;align-items:start}
+.who ul{list-style:none}
+.who li{display:grid;grid-template-columns:150px 1fr;gap:16px;padding:16px 0;border-bottom:1px solid var(--rule)}
+.who li b{font-weight:800}
+.who li span{color:var(--ink-soft)}
+.quote{background:var(--ink);color:#fff;border-radius:6px;padding:32px}
+.quote p{font-size:1.25rem;line-height:1.45;margin-bottom:18px}
+.quote small{color:#BFB4A6}
+
+/* tarifs */
+.prices{width:100%;border-collapse:collapse;font-size:1rem}
+.prices th,.prices td{text-align:left;padding:16px 14px;border-bottom:1px solid var(--rule)}
+.prices thead th{border-bottom:2px solid var(--ink);font-size:.9rem;color:var(--ink-soft);font-weight:600}
+.prices td.p{font-size:1.5rem;font-weight:800;}
+.prices tr.m{background:var(--kraft-soft)}
+.tscroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.prices.lots td.p{font-size:1.2rem;white-space:nowrap}
+.prices.lots th{white-space:nowrap}
+.badge{display:inline-block;font-size:.78rem;font-weight:700;background:var(--ink);color:#fff;border-radius:99px;padding:2px 10px;margin-left:8px;vertical-align:middle}
+.small{font-size:.9rem;color:var(--ink-soft);margin-top:14px}
+
+/* FAQ */
+.faq details{border-bottom:1px solid var(--rule)}
+.faq summary{list-style:none;cursor:pointer;padding:20px 40px 20px 0;font-weight:700;font-size:1.1rem;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:4px;top:14px;font-size:1.8rem;font-weight:400;transition:transform .2s}
+.faq details[open] summary::after{transform:rotate(45deg)}
+.faq details p{padding:0 0 22px;color:var(--ink-soft)}
+
+/* bandeau final */
+.final{background:var(--ink);color:#fff;padding:88px 0}
+.final .w{display:flex;justify-content:space-between;align-items:center;gap:32px;flex-wrap:wrap}
+.final h2{font-size:clamp(2rem,4.4vw,3.4rem);max-width:16ch}
+.final p{color:#D8CFC2;margin-top:12px}
+
+footer{padding:34px 0;font-size:.88rem;color:var(--ink-soft)}
+footer .w{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+
+/* ===== DIAGNOSTIC ===== */
+.dhead{background:var(--kraft-soft);border-bottom:2px solid var(--ink);padding:56px 0 40px}
+.dhead h1{font-size:clamp(2.2rem,5vw,3.8rem);font-weight:800;margin-bottom:12px}
+.dhead p{font-size:1.1rem;color:#2A2118}
+.dhead .row{display:flex;gap:12px;margin-top:22px;flex-wrap:wrap}
+.dsteps{display:flex;gap:0;margin-top:30px;border:2px solid var(--ink);border-radius:6px;overflow:hidden;background:var(--paper);max-width:720px}
+.dsteps div{flex:1;padding:10px 14px;font-size:.9rem;font-weight:600;color:var(--ink-soft)}
+.dsteps div+div{border-left:1px solid var(--rule)}
+.dsteps b{color:var(--ink);margin-right:6px}
+
+.block{padding:48px 0;border-bottom:1px solid var(--rule)}
+.block h2{font-size:1.7rem;margin-bottom:6px}
+.block .hint{color:var(--ink-soft);margin-bottom:24px}
+label{display:block;font-size:.85rem;font-weight:600;color:var(--ink-soft);margin-bottom:5px}
+input,select{width:100%;font:500 1rem var(--f);padding:10px 12px;border:2px solid var(--rule);border-radius:4px;background:var(--paper);color:var(--ink)}
+input:focus,select:focus{outline:none;border-color:var(--fold)}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:.82rem;font-weight:600;color:var(--ink-soft);text-align:left;padding:0 8px 8px 0}
+.tbl td{padding:6px 8px 6px 0;vertical-align:middle}
+.tbl td input,.tbl td select{padding:8px 10px}
+.tbl .dim{width:88px}
+.tbl .qty{width:96px}
+.tbl .pr{width:100px}
+.del{background:none;border:0;color:var(--ink-soft);font-size:1.4rem;line-height:1;padding:4px 8px;border-radius:4px}
+.del:hover{background:var(--ko-soft);color:var(--cut)}
+.add{background:none;border:2px dashed var(--rule);border-radius:4px;padding:10px 16px;font-weight:600;color:var(--ink-soft);margin-top:10px}
+.add:hover{border-color:var(--fold);color:var(--fold)}
+.err{color:var(--cut);font-weight:600;margin-top:14px;min-height:1.2em}
+.go{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:8px}
+
+/* résultats */
+#results{display:none;scroll-margin-top:170px}
+section[id],#contactBlock{scroll-margin-top:150px}
+#results.on{display:block}
+.score{display:grid;grid-template-columns:1fr 1fr;gap:0;border:2px solid var(--ink);border-radius:6px;overflow:hidden;margin-bottom:28px}
+.score>div{padding:28px}
+.score>div+div{border-left:2px solid var(--ink);background:#fff;box-shadow:inset 0 6px 0 var(--ok)}
+.score h3{font-size:1rem;font-weight:700;color:var(--ink-soft);margin-bottom:8px}
+.score .big{font-size:4rem}
+.score .bar{height:14px;background:var(--rule);border-radius:99px;margin:14px 0 8px;position:relative;overflow:hidden}
+.score .bar i{position:absolute;left:0;top:0;bottom:0;background:var(--ok)}
+.score .bar.ko i{background:var(--cut)}
+.score p{font-size:.95rem;color:var(--ink-soft)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;border-top:2px solid var(--ink);margin-bottom:40px}
+.kpis div{padding:18px 18px 0 0}
+.kpis div+div{padding-left:18px;border-left:1px solid var(--rule)}
+.kpis b{display:block;font-size:1.7rem;font-weight:800;line-height:1.1}
+.kpis span{font-size:.9rem;color:var(--ink-soft)}
+.impact{display:grid;grid-template-columns:.8fr 1.2fr;gap:36px;margin-bottom:48px;align-items:start}
+.impact h2{font-size:1.35rem;margin-bottom:8px}
+.calbox{background:#fff;border:2px solid var(--ink);box-shadow:inset 6px 0 0 var(--kraft);border-radius:6px;padding:24px}
+.calbox .big{font-size:3.2rem;color:var(--ink)}
+.calbox p{color:var(--ink-soft);font-size:.96rem;margin-top:6px}
+.calbox .eq{margin-top:14px;padding-top:12px;border-top:1px dashed var(--kraft-deep);font-weight:600}
+.money{width:100%;border-collapse:collapse;font-size:1rem}
+.money th,.money td{padding:12px 10px;border-bottom:1px solid var(--rule);text-align:right}
+.money th:first-child,.money td:first-child{text-align:left}
+.money thead th{font-size:.82rem;font-weight:600;color:var(--ink-soft);border-bottom:2px solid var(--ink)}
+.money tr.tot td{font-weight:800;border-top:2px solid var(--ink);border-bottom:0}
+.money .g{color:var(--ok);font-weight:700}
+.money .r{color:var(--cut);font-weight:700}
+.year{margin-top:16px;display:flex;justify-content:space-between;align-items:baseline;gap:12px;background:var(--ink);color:#fff;border-radius:6px;padding:16px 20px}
+.year b{font-size:1.8rem;font-weight:800}
+.res{width:100%;border-collapse:collapse;font-size:.96rem}
+.res th{text-align:left;font-size:.82rem;color:var(--ink-soft);font-weight:600;padding:10px 8px;border-bottom:2px solid var(--ink)}
+.res td{padding:14px 8px;border-bottom:1px solid var(--rule);vertical-align:middle}
+.res tr.sel td{background:#F1F1F0;box-shadow:inset 0 -2px 0 var(--kraft)}
+.res tbody tr{cursor:pointer}
+.res tbody tr:hover td{background:#F6F6F5}
+.pill{display:inline-block;font-size:.8rem;font-weight:700;padding:3px 10px;border-radius:99px;white-space:nowrap}
+.pill.ok{background:var(--ok-soft);color:var(--ok)}
+.pill.ko{background:var(--ko-soft);color:var(--cut)}
+.pill.na{background:#eee;color:var(--ink-soft)}
+.pct{font-weight:800;}
+.detail{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:32px;border:2px solid var(--ink);border-radius:6px;padding:26px}
+.detail h3{font-size:1.3rem;margin-bottom:4px}
+.detail .vs{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.detail figure{text-align:center}
+.detail figure svg{width:100%;height:200px}
+.detail figcaption{font-size:.9rem;color:var(--ink-soft)}
+.detail figcaption b{display:block;color:var(--ink);font-size:1.3rem;}
+.detail ul{list-style:none;margin-top:14px}
+.detail li{padding:8px 0;border-bottom:1px solid var(--rule);display:flex;justify-content:space-between;gap:12px;font-size:.96rem}
+.detail li span:last-child{font-weight:700;text-align:right}
+.report{white-space:pre-wrap;font:.9rem/1.6 var(--f);background:#F6F6F5;border:1px solid var(--rule);border-radius:4px;padding:18px;margin-top:16px;display:none}
+.note{font-size:.88rem;color:var(--ink-soft);margin-top:22px;max-width:80ch}
+
+@media (max-width:900px){
+  .hero .w,.compare,.who,.detail,.score,.impact{grid-template-columns:1fr}
+  .score>div+div{border-left:0;border-top:2px solid var(--ink)}
+  .formats{grid-template-columns:1fr 1fr}
+  .fmt:nth-child(2){border-right:0}
+  .fmt:nth-child(-n+2){border-bottom:1px solid var(--rule)}
+  .steps,.feats,.costs,.kpis,.g4{grid-template-columns:1fr 1fr}
+  .step:nth-child(3){border-left:0;padding-left:0}
+  .steps{row-gap:32px}
+  .costs div+div,.kpis div+div{border-left:0;padding-left:0}
+  .tbl-wrap{overflow-x:auto}
+  .tbl{min-width:640px}
+  .res-wrap{overflow-x:auto}
+  .res{min-width:720px}
+}
+@media (max-width:600px){
+  .top nav .tab.home{display:none}
+  .steps,.feats,.costs,.kpis,.g4,.detail .vs{grid-template-columns:1fr}
+  .step+.step{border-left:0;padding-left:0}
+  .who li{grid-template-columns:1fr;gap:2px}
+  .sec{padding:64px 0}
+}
+
+/* ===== forme inspirée de premierprompt.fr ===== */
+.top{border-bottom:0}
+.top .w{display:block;height:auto}
+.toprow{display:flex;justify-content:space-between;align-items:center;padding:14px 0 6px}
+.links{display:flex;gap:4px;flex-wrap:wrap;padding:0 0 10px;margin-left:-8px}
+.links a,.links button{background:none;border:0;padding:6px 8px;color:var(--ink-soft);text-decoration:none;font:500 .95rem var(--f);border-radius:4px;cursor:pointer}
+.links a:hover,.links button:hover{color:var(--ink)}
+.links a[aria-current="page"]{color:var(--ink);text-decoration:underline;text-underline-offset:6px;text-decoration-thickness:2px;text-decoration-color:var(--kraft)}
+.btn.sm{padding:8px 13px;font-size:.88rem}
+.announce{background:var(--kraft);color:var(--ink)}
+.announce .w{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap;padding-top:12px;padding-bottom:12px}
+.announce p{max-width:none;font-size:.93rem}
+.announce b{color:var(--ink);margin-right:8px;font-weight:700}
+.btn.white{background:#fff;color:var(--ink);border-color:#fff}
+.btn.white:hover{background:var(--kraft-soft)}
+.btn.ghost{background:transparent;color:#fff;border-color:#fff}
+.btn.ghost:hover{background:rgba(255,255,255,.08)}
+.hl{color:var(--kraft-deep)}
+.hero2{background:var(--ink);color:#fff}
+.hero2 .hl{color:#C8925A}
+.hero2 h1{color:#fff}
+.hero2 .w{display:grid;grid-template-columns:1.25fr .85fr;gap:48px;align-items:center;padding-top:72px;padding-bottom:72px}
+.hero2 h1{font-size:clamp(2.6rem,5.4vw,4.2rem);line-height:.98;letter-spacing:-.02em;margin-bottom:22px;max-width:13ch}
+.hero2 p{font-size:1.12rem;color:#D6D3CF;margin-bottom:28px;max-width:52ch}
+.cta{display:flex;gap:10px;flex-wrap:wrap}
+.lawcard{background:#fff;color:var(--ink);border-radius:10px;padding:26px 26px 22px;border-top:6px solid var(--kraft)}
+.lc-top{display:flex;justify-content:space-between;align-items:center;color:var(--kraft-deep);font-weight:600;font-size:.92rem}
+.lc-big{display:flex;align-items:baseline;gap:12px;margin:10px 0 6px}
+.lc-big b{white-space:nowrap;font-family:var(--h);font-size:4.6rem;line-height:1;font-weight:800;color:var(--ink)}
+.lc-big span{line-height:1.15;font-family:var(--h);font-size:1.35rem;font-weight:700;color:var(--ink)}
+.hero2 .lawcard .lc-meta{color:#6B6560;margin-bottom:20px}
+.lawcard h3{font-size:1.3rem;color:var(--ink);margin-bottom:6px}
+.hero2 .lawcard p{font-size:.95rem;color:#3E3A36;margin-bottom:0}
+.hero2 .lawcard .lc-src{margin-top:16px;font-size:.82rem;color:#8A847D}
+.offers{border-bottom:1px solid var(--rule)}
+.offers .w{display:grid;grid-template-columns:repeat(3,1fr);gap:40px;padding-top:44px;padding-bottom:44px}
+.offers h2{font-size:2rem;margin-bottom:6px}
+.offers h3{font-size:1.05rem;font-family:var(--f);font-weight:600;letter-spacing:0;line-height:1.35;margin-bottom:8px}
+.offers p{color:var(--ink-soft);font-size:.92rem}
+.statement{background:#fff;border-bottom:1px solid var(--rule)}
+.statement .w{display:grid;grid-template-columns:1fr 1fr;gap:56px;padding-top:64px;padding-bottom:64px;align-items:start}
+.statement h2{font-size:clamp(1.6rem,2.8vw,2.15rem);line-height:1.18}
+.statement p{color:var(--ink-soft);text-align:justify;hyphens:auto;margin-bottom:14px}
+.ulink{background:none;border:0;padding:0;font:600 .98rem var(--f);color:var(--ink);text-decoration:underline;text-underline-offset:4px;cursor:pointer}
+.ulink:hover{color:var(--kraft-deep)}
+.sechead{display:flex;justify-content:space-between;align-items:baseline;gap:20px}
+.sec .sechead h2{margin-bottom:12px}
+.split{display:grid;grid-template-columns:.9fr 1.1fr;gap:48px;align-items:center;margin-bottom:40px}
+.dated{list-style:none;border-top:2px solid var(--ink)}
+.dated li{display:grid;grid-template-columns:170px 1fr;gap:28px;padding:22px 0;border-bottom:1px solid var(--rule)}
+.dated .d{display:flex;flex-direction:column;font-size:.9rem;color:var(--ink-soft);gap:2px}
+.dated .d em{font-style:normal;color:var(--kraft-deep);font-weight:600}
+.dated h3{font-size:1.25rem;margin-bottom:6px}
+.dated p{color:var(--ink-soft)}
+footer{background:#F1F1F0;border-top:1px solid var(--rule);padding:44px 0}
+footer .w{display:block}
+footer b{display:block;font-family:var(--h);font-size:1.1rem;color:var(--ink);margin-bottom:10px}
+footer p{max-width:58ch;margin-bottom:10px;font-size:.92rem}
+.flinks{display:flex;gap:16px;flex-wrap:wrap}
+.flinks a,.flinks button{background:none;border:0;padding:0;font:inherit;color:var(--ink);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+@media (max-width:900px){
+  .hero2 .w,.statement .w,.split{grid-template-columns:1fr}
+  .offers .w{grid-template-columns:1fr;gap:26px}
+  .dated li{grid-template-columns:1fr;gap:8px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="w">
+    <div class="toprow">
+      <a class="brand" href="#accueil" aria-label="ModuPack, accueil">
+        <svg width="28" height="28" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="9" width="26" height="19" fill="#A8743F" stroke="#1E1E1E" stroke-width="2"/><path d="M2 9l4-6h18l4 6" fill="#D9B98F" stroke="#1E1E1E" stroke-width="2"/><path d="M2 18h26" stroke="#2E6B4E" stroke-width="1.6" stroke-dasharray="3 2"/></svg>
+        ModuPack
+      </a>
+      <a class="btn line sm" href="#diagnostic">Diagnostic gratuit</a>
+    </div>
+    <nav class="links" aria-label="Pages">
+      <a href="#accueil" data-nav="accueil">Accueil</a>
+      <a href="#diagnostic" data-nav="diagnostic">Diagnostic</a>
+      <button type="button" data-goto="formats">Le carton</button>
+      <button type="button" data-goto="tarifs">Tarifs</button>
+      <button type="button" data-goto="faq">Questions</button>
+      <button type="button" data-goto="contactBlock">Nous contacter</button>
+    </nav>
+  </div>
+  <div class="announce">
+    <div class="w">
+      <p><b>Lancement à Lyon, janvier 2027</b> Diagnostic gratuit de vos colis et 20 cartons d'essai offerts</p>
+      <a class="btn sm" href="#diagnostic">Mesurer mes colis</a>
+    </div>
+  </div>
+</header>
+
+<!-- ================= ACCUEIL ================= -->
+<main id="v-accueil" class="view">
+
+<section class="hero2">
+  <div class="w">
+    <div class="hero-txt">
+      <h1>Le carton qui <span class="hl">s'ajuste</span> à vos produits.</h1>
+      <p>Un seul carton, quatre formats. Vous le pliez à la hauteur et à la largeur de ce que vous envoyez. Pas de colle, pas de scotch, et presque plus de papier de calage.</p>
+      <div class="cta">
+        <a class="btn kraft" href="#diagnostic">Faire le diagnostic de mes colis</a>
+        <button class="btn ghost" type="button" data-goto="formats">Voir comment il se plie</button>
+      </div>
+    </div>
+    <aside class="lawcard" aria-label="La règle européenne">
+      <div class="lc-top"><span>La règle qui arrive</span><svg width="22" height="22" viewBox="0 0 30 30" aria-hidden="true"><rect x="2" y="9" width="26" height="19" fill="#A8743F"/><path d="M2 9l4-6h18l4 6" fill="#D9B98F"/></svg></div>
+      <div class="lc-big"><b>50 %</b><span>de vide maximum</span></div>
+      <p class="lc-meta">Dans chaque colis e-commerce, à partir du 1er janvier 2030</p>
+      <h3>Le calage compte comme du vide</h3>
+      <p>Papier, coussins d'air, papier bulle : ce qui remplit le carton n'est pas du produit. C'est celui qui prépare le colis qui doit respecter la règle.</p>
+      <p class="lc-src">Règlement (UE) 2025/40, article 24</p>
+    </aside>
+  </div>
+</section>
+
+<section class="offers">
+  <div class="w">
+    <div><h2>Le carton</h2><h3>Une seule pièce qui se plie en quatre formats</h3><p>30 × 20 × 20 cm, hauteur et largeur réglables</p></div>
+    <div><h2>Le diagnostic</h2><h3>Le taux de vide de chacun de vos colis</h3><p>Gratuit, en ligne, cinq minutes</p></div>
+    <div><h2>Le suivi</h2><h3>Le bon pliage pour chaque produit</h3><p>Échantillons, liste de pliage, livraison directe</p></div>
+  </div>
+</section>
+
+<section class="statement">
+  <div class="w">
+    <h2>Aujourd'hui, on remplit le vide avec du papier. <span class="hl">En 2030, il faudra s'en passer.</span></h2>
+    <div>
+      <p>Une boutique garde deux ou trois tailles de carton et cale le reste. Ce vide se paie en calage, puis au transport, parce que beaucoup de transporteurs facturent au volume. ModuPack réduit le carton au lieu de remplir le vide.</p>
+      <button type="button" class="ulink" data-goto="probleme">Voir l'exemple du vase</button>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="probleme">
+  <div class="w">
+    <div class="sechead"><h2>Le même vase, deux colis</h2></div>
+    <p class="intro">Un vase de 24 × 14 × 14 cm. À gauche, le carton standard le plus proche. À droite, un ModuPack plié au plus juste.</p>
+    <div class="compare">
+      <div class="cmp">
+        <h3>Carton standard 40 × 30 × 20</h3>
+        <div class="sub">Vase de 24 × 14 × 14 cm</div>
+        <div class="big">80 %</div>
+        <div class="sub">de vide, rempli de calage</div>
+        <svg id="isoA" aria-label="Le vase dans un grand carton standard"></svg>
+      </div>
+      <div class="cmp good">
+        <h3>ModuPack plié en H15-L15</h3>
+        <div class="sub">Le même vase</div>
+        <div class="big">30 %</div>
+        <div class="sub">de vide, sans calage</div>
+        <svg id="isoB" aria-label="Le vase dans un ModuPack réglé au plus juste"></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="formats">
+  <div class="w split">
+    <div>
+      <div class="sechead"><h2>Un seul carton, quatre façons de le plier</h2></div>
+      <p class="intro" style="margin-bottom:0">À plat, c'est une seule feuille de carton. La hauteur (20 ou 15 cm) réduit le volume du colis. La largeur (20 ou 15 cm) replie une paroi à l'intérieur pour caler le produit.</p>
+    </div>
+    <div class="dieline" style="position:relative">
+      <span class="hand note-hand" style="left:18px;right:auto">notre patron, à plat</span>
+      <svg viewBox="0 0 520 380" class="draw" aria-label="Patron à plat du carton ModuPack, avec lignes de coupe et lignes de pli">
+        <!-- contour de coupe -->
+        <path class="cutline" style="--len:2200" fill="#F4F4F3" stroke="#B5452F" stroke-width="2.2"
+          d="M70 70 L170 70 L170 40 L350 40 L350 70 L450 70 L450 110 L480 110 L480 290 L450 290 L450 340 L70 340 L70 290 L40 290 L40 110 L70 110 Z"/>
+        <!-- plis de fond -->
+        <g class="folds" stroke="#2E6B4E" stroke-width="1.8" stroke-dasharray="7 5" fill="none">
+          <line class="late" style="--len:420" x1="70" y1="110" x2="450" y2="110"/>
+          <line class="late" style="--len:420" x1="70" y1="290" x2="450" y2="290"/>
+          <line class="late" style="--len:200" x1="170" y1="70" x2="170" y2="340"/>
+          <line class="late" style="--len:200" x1="350" y1="70" x2="350" y2="340"/>
+          <line class="late" style="--len:200" x1="170" y1="70" x2="350" y2="70"/>
+          <line class="late" style="--len:200" x1="70" y1="110" x2="70" y2="290"/>
+          <line class="late" style="--len:200" x1="450" y1="110" x2="450" y2="290"/>
+        </g>
+        <!-- lignes de réglage -->
+        <g class="folds" stroke="#2E6B4E" stroke-width="1.4" stroke-dasharray="3 4" fill="none">
+          <line class="late" style="--len:120" x1="350" y1="150" x2="450" y2="150"/>
+          <line class="late" style="--len:120" x1="70" y1="150" x2="170" y2="150"/>
+          <line class="late" style="--len:200" x1="200" y1="110" x2="200" y2="290"/>
+        </g>
+        <g class="fadein" font-family="Caveat, cursive" font-size="25" font-weight="600" fill="#2E6B4E">
+          <text x="384" y="24" transform="rotate(-3 384 24)">on plie ici</text>
+          <text x="384" y="46" transform="rotate(-3 384 46)">pour 15 cm</text>
+          <path d="M470 50 Q492 96 458 146" stroke="#2E6B4E" stroke-width="1.6" fill="none"/>
+          <path d="M458 146 l9 -3 M458 146 l1 -9" stroke="#2E6B4E" stroke-width="1.6" fill="none"/>
+        </g>
+        <g class="fadein" font-family="Montserrat, sans-serif" font-size="13" font-weight="700" fill="#1E1E1E">
+          <text x="226" y="205">Fond 30 × 20</text>
+          <text x="374" y="132">H20</text><text x="374" y="168">H15</text>
+          <text x="94" y="132">H20</text><text x="94" y="168">H15</text>
+          <text x="206" y="128" fill="#2E6B4E">L15</text>
+          <text x="216" y="62">Couvercle</text>
+        </g>
+      </svg>
+      <div class="legend"><span><i></i>Ligne de coupe</span><span><i class="f"></i>Ligne de pli</span><span>Une seule pièce, sans colle</span></div>
+    </div>
+  </div>
+  <div class="w"><div class="formats" id="fmtGrid"></div></div>
+</section>
+
+<section class="sec">
+  <div class="w">
+    <div class="sechead"><h2>Comment ça se passe</h2></div>
+    <p class="intro">On ne vous envoie pas un catalogue. On regarde vos produits avec vous, un par un.</p>
+    <div class="steps">
+      <div class="step"><h3>Vous mesurez</h3><p>Sur ce site, avec un mètre ruban. Vous voyez combien de vide il y a dans chacun de vos colis.</p></div>
+      <div class="step"><h3>On vous envoie des cartons</h3><p>20 ModuPack offerts, panachés S, M et L, pour les essayer sur vos vrais produits.</p></div>
+      <div class="step"><h3>On fait la liste</h3><p>Pour chaque produit, le pliage à utiliser. Vous l'affichez à côté de la table d'emballage.</p></div>
+      <div class="step"><h3>Vous commandez</h3><p>Les cartons sont fabriqués en France par notre cartonnier et livrés directement chez vous.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="tarifs">
+  <div class="w">
+    <div class="sechead"><h2>Tarifs</h2><a class="ulink" href="#diagnostic">Calculer avec mes chiffres</a></div>
+    <p class="intro">Environ 25 % de plus qu'un carton standard. Mais vous n'achetez plus de calage, et le colis vous revient souvent moins cher.</p>
+    <div class="tscroll"><table class="prices lots">
+      <thead><tr><th>Modèle</th><th>Lot de 50<br><span class="small" style="margin:0">petite commande</span></th><th>Lot de 250<br><span class="small" style="margin:0">un mois d'envois</span></th><th>Lot de 1 000</th><th>Palette de 2 500</th></tr></thead>
+      <tbody>
+        <tr><td><b>ModuPack S</b><br><span class="small" style="margin:0">Petits objets, bijoux, beauté</span></td><td class="p">0,72 €</td><td class="p">0,63 €</td><td class="p">0,60 €</td><td class="p">0,57 €</td></tr>
+        <tr class="m"><td><b>ModuPack M</b><span class="badge">4 formats</span><br><span class="small" style="margin:0">30 × 20 × 20 cm, celui qu'on a prototypé</span></td><td class="p">1,32 €</td><td class="p">1,15 €</td><td class="p">1,09 €</td><td class="p">1,04 €</td></tr>
+        <tr><td><b>ModuPack L</b><br><span class="small" style="margin:0">Objets plus volumineux</span></td><td class="p">2,32 €</td><td class="p">2,02 €</td><td class="p">1,92 €</td><td class="p">1,82 €</td></tr>
+      </tbody>
+    </table></div>
+    <p class="small">Les 20 premiers cartons sont offerts pour essayer. Prix HT par carton, livraison offerte dès le lot de 250. Vous pouvez panacher S, M et L dans un même lot. Logisticiens : contrat annuel au prix palette.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="w">
+    <div class="sechead"><h2>Où on en est</h2></div>
+    <ul class="dated">
+      <li><div class="d"><span>Octobre 2026</span><span>Fabrication</span></div><div><h3>Deux cartonniers ont validé le principe</h3><p>Plusieurs lignes de pliage sur un même carton, c'est faisable. Le surcoût vient des lignes de pliage, pas du carton.</p></div></li>
+      <li><div class="d"><span>Novembre 2026</span><span>Prototype</span><em>En cours</em></div><div><h3>Un patron en une seule pièce, sans colle ni scotch</h3><p>Quatre formats dans un carton de 30 × 20 × 20 cm. On le teste en ce moment sur de vrais produits.</p></div></li>
+      <li><div class="d"><span>Janvier 2027</span><span>Lancement</span></div><div><h3>Les premières boutiques à Lyon</h3><p>Maison et déco d'abord, puis mode, accessoires et beauté.</p></div></li>
+    </ul>
+  </div>
+</section>
+
+<section class="sec faq" id="faq">
+  <div class="w">
+    <div class="sechead"><h2>Questions fréquentes</h2></div>
+    <details><summary>C'est quoi, cette règle des 50 % ?</summary><p>C'est l'article 24 du règlement européen sur les emballages (le PPWR, règlement (UE) 2025/40). À partir du 1er janvier 2030, un colis e-commerce ne pourra pas contenir plus de 50 % de vide. Le papier, les coussins d'air ou le papier bulle comptent comme du vide. Et c'est à celui qui prépare le colis de faire attention, donc à vous.</p></details>
+    <details><summary>Le diagnostic, c'est un certificat officiel ?</summary><p>Non, et on préfère être clairs là-dessus. C'est une fiche de calcul pour vous aider à y voir clair. La Commission européenne doit encore publier sa méthode officielle (d'ici février 2028). On mettra le calcul à jour quand elle sortira.</p></details>
+    <details><summary>Je peux changer d'avis après avoir plié ?</summary><p>Dans un sens seulement : on peut passer de 20 à 15 cm, pas l'inverse. Le plus simple, c'est de plier au moment de préparer la commande, quand le produit est devant vous.</p></details>
+    <details><summary>Et pour le recyclage ?</summary><p>Il n'y a que du carton : pas de colle, pas de scotch. Il part dans le bac de tri comme n'importe quel carton.</p></details>
+    <details><summary>Qui fabrique les cartons ?</summary><p>Un cartonnier en France, à partir de notre patron. Nous n'avons pas d'usine : les cartons partent de chez lui et arrivent directement chez vous.</p></details>
+  </div>
+</section>
+
+<section class="final">
+  <div class="w">
+    <div>
+      <h2>Combien de vide dans vos colis ?</h2>
+      <p>Prenez un mètre ruban et vos trois produits les plus vendus. Ça prend cinq minutes.</p>
+      <div class="cta" style="margin-top:24px">
+        <a class="btn white" href="#diagnostic">Commencer le diagnostic</a>
+        <button class="btn ghost" type="button" data-goto="contactBlock">Recevoir 20 cartons d'essai</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ================= DIAGNOSTIC ================= -->
+<main id="v-diagnostic" class="view">
+
+<section class="dhead">
+  <div class="w">
+    <h1>Diagnostic de vos colis</h1>
+    <p>Mesurez vos cartons et vos produits, et entrez-les ci-dessous. Pour chaque produit, vous verrez combien de vide il y a aujourd'hui, et combien il en resterait avec ModuPack. Tout se calcule sur votre écran, on ne reçoit rien.</p>
+    <div class="row">
+      <button class="btn line" id="demo">Voir un exemple d'abord</button>
+      <button class="btn line" id="reset">Tout effacer</button>
+    </div>
+    <div class="dsteps" aria-hidden="true">
+      <div><b>1</b>Votre boutique</div><div><b>2</b>Vos cartons</div><div><b>3</b>Vos produits</div><div><b>4</b>Résultats</div>
+    </div>
+  </div>
+</section>
+
+<form id="diag" novalidate>
+<div class="w">
+  <section class="block">
+    <h2>Votre boutique</h2>
+    <p class="hint">Pas obligatoire. Mais sans le coût du calage, on ne peut pas vous dire combien vous économisez.</p>
+    <div class="g4">
+      <div><label for="shop">Nom de la boutique</label><input id="shop" placeholder="Atelier Lumière"></div>
+      <div><label for="calMode">Comment vous connaissez le coût du calage</label>
+        <select id="calMode"><option value="colis">Coût moyen par colis</option><option value="litre">Coût par litre de calage</option></select></div>
+      <div><label for="calage" id="calLbl">Coût du calage par colis (€)</label><input id="calage" type="number" min="0" step="0.001" placeholder="0,20"></div>
+      <div><label for="divisor">Diviseur du transporteur</label>
+        <select id="divisor"><option value="5000">5 000 (courant)</option><option value="6000">6 000</option><option value="4000">4 000</option></select></div>
+      <div><label for="mp">Prix ModuPack M HT (€)</label><input id="mp" type="number" min="0" step="0.01" value="1.15"></div>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2>Vos cartons actuels</h2>
+    <p class="hint">Mesurez l'intérieur, en centimètres. Les deux ou trois que vous utilisez le plus suffisent.</p>
+    <div class="tbl-wrap"><table class="tbl" id="boxTbl">
+      <thead><tr><th>Nom</th><th>Longueur</th><th>Largeur</th><th>Hauteur</th><th>Prix HT (€)</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <button type="button" class="add" id="addBox">+ Ajouter un carton</button>
+  </section>
+
+  <section class="block">
+    <h2>Vos produits</h2>
+    <p class="hint">Mesurez le produit tel qu'il part, dans sa boîte s'il en a une. Si vous ne savez pas quel carton vous utilisez pour lui, laissez « Le plus petit qui rentre ».</p>
+    <div class="tbl-wrap"><table class="tbl" id="prodTbl">
+      <thead><tr><th>Produit</th><th>Longueur</th><th>Largeur</th><th>Hauteur</th><th>Colis / mois</th><th>Carton utilisé</th><th></th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+    <button type="button" class="add" id="addProd">+ Ajouter un produit</button>
+    <div class="go" style="margin-top:28px">
+      <button class="btn" type="submit">Calculer</button>
+    </div>
+    <div class="err" id="err" role="alert"></div>
+  </section>
+</div>
+</form>
+
+<section id="results" class="block" style="border-bottom:0">
+  <div class="w">
+    <h2 id="resTitle">Votre diagnostic</h2>
+    <p class="hint">Part de vos colis qui respectent la limite de 50 % de vide, pondérée par le nombre de colis par mois.</p>
+    <div class="score">
+      <div>
+        <h3>Aujourd'hui</h3>
+        <div class="big" id="sNow">0 %</div>
+        <div class="bar ko"><i id="bNow"></i></div>
+        <p id="pNow"></p>
+      </div>
+      <div>
+        <h3>Avec ModuPack</h3>
+        <div class="big" id="sMod" style="color:var(--ok)">0 %</div>
+        <div class="bar"><i id="bMod"></i></div>
+        <p id="pMod"></p>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+
+    <div class="impact" id="impact"></div>
+
+    <h2 style="font-size:1.35rem;margin-bottom:12px">Produit par produit</h2>
+    <p class="hint" style="margin-bottom:12px">Cliquez sur une ligne pour voir le détail.</p>
+    <div class="res-wrap"><table class="res" id="resTbl">
+      <thead><tr><th>Produit</th><th>Colis / mois</th><th>Carton actuel</th><th>Vide actuel</th><th>ModuPack conseillé</th><th>Vide ModuPack</th><th>Résultat</th></tr></thead>
+      <tbody></tbody>
+    </table></div>
+
+    <div class="detail" id="detail"></div>
+
+    <div class="go" style="margin-top:32px">
+      <button class="btn" type="button" id="showRep">Voir la fiche de calcul</button>
+      <button class="btn line" type="button" id="copyRep">Copier la fiche</button>
+      <a class="btn kraft" href="#accueil" id="samples">Recevoir 20 cartons d'essai</a>
+    </div>
+    <div class="report" id="rep"></div>
+    <p class="note">Taux de vide = (volume intérieur du carton − volume du produit) ÷ volume intérieur du carton. Le calage compte comme du vide. Seuil : 50 % maximum (PPWR, règlement (UE) 2025/40, art. 24), applicable au 1er janvier 2030, ou plus tard si la méthode de calcul de la Commission (attendue d'ici février 2028) l'impose. Ce diagnostic est indicatif. Économies estimées en supposant qu'aucun calage n'est nécessaire avec ModuPack. Poids volumétrique = L × l × H ÷ diviseur du transporteur.</p>
+  </div>
+</section>
+
+<section class="final" id="contactBlock">
+  <div class="w">
+    <div>
+      <h2>Essayez-le sur vos produits</h2>
+      <p>Laissez-nous votre e-mail. On vous envoie 20 cartons d'essai, gratuitement.</p>
+    </div>
+    <form id="contact" style="display:flex;gap:10px;flex-wrap:wrap;max-width:460px;width:100%">
+      <label for="mail" style="position:absolute;left:-9999px">E-mail</label>
+      <input id="mail" type="email" required placeholder="vous@boutique.fr" style="flex:1;min-width:200px;border-color:#4A4540;background:#2C2A27;color:#fff">
+      <button class="btn kraft" type="submit">Recevoir 20 cartons d'essai</button>
+      <p id="thanks" style="display:none;color:#CFE3D6;width:100%">Merci. Ce site est une démonstration : la demande n'est pas réellement envoyée.</p>
+    </form>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="w">
+    <b>ModuPack</b>
+    <p>Un carton en une seule pièce, réglable en hauteur et en largeur, pour des colis avec moins de vide.</p>
+    <p>ModuPack est une entreprise fictive, créée dans le cadre du cours ICE à l'Université Paris Nanterre.</p>
+    <p class="flinks"><a href="#diagnostic">Diagnostic</a><button type="button" data-goto="tarifs">Tarifs</button><button type="button" data-goto="faq">Questions</button></p>
+  </div>
+</footer>
+
+<script>
+/* ---------- données ---------- */
+const FORMATS = [
+  {name:"H20-L20", L:30, W:20, H:20, use:"lampes, grands vases"},
+  {name:"H20-L15", L:30, W:15, H:20, use:"bouteilles, vases fins"},
+  {name:"H15-L20", L:30, W:20, H:15, use:"boîtes, livres, coffrets"},
+  {name:"H15-L15", L:30, W:15, H:15, use:"bougies, petits coffrets"}
+];
+const $ = id => document.getElementById(id);
+const fr = (x,d=0) => Number(x).toLocaleString("fr-FR",{minimumFractionDigits:d,maximumFractionDigits:d});
+const eur = x => fr(x,2) + " €";
+const val = el => { const v = parseFloat(String(el.value).replace(",", ".")); return isNaN(v) ? null : v; };
+const sortD = a => [...a].sort((x,y)=>y-x);
+const fits = (p,b) => { const s=sortD(p), t=sortD(b); return s.every((v,i)=>v<=t[i]); };
+const vol = a => a[0]*a[1]*a[2];
+const vr = (p,b) => 1 - vol(p)/vol(b);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- dessin isométrique ---------- */
+function iso(box, prod, opt={}){
+  // box, prod : [L, W, H] en cm ; le produit est posé dans le coin arrière gauche
+  const s = opt.s || 4, c = Math.cos(Math.PI/6), n = Math.sin(Math.PI/6);
+  const P = (x,y,z) => [ (x - y)*c*s, (x + y)*n*s - z*s ];
+  const [L,W,H] = box;
+  let [pl,pw,ph] = prod;
+  // orienter le produit pour qu'il rentre au mieux
+  const order = (()=>{ const b=[L,W,H].map((v,i)=>[v,i]).sort((a,b)=>b[0]-a[0]); const p=sortD(prod); const r=[0,0,0]; b.forEach(([_,i],k)=>r[i]=p[k]); return r; })();
+  if (fits(prod, box)) [pl,pw,ph] = order;
+  const pts = [], add = (x,y,z)=>{const q=P(x,y,z); pts.push(q); return q;};
+  const poly = (arr, fill, stroke, extra="") => `<polygon points="${arr.map(q=>q.join(",")).join(" ")}" fill="${fill}" stroke="${stroke}" stroke-width="1.4" stroke-linejoin="round" ${extra}/>`;
+  // faces arrière/fond de la boîte (intérieur visible)
+  const b = {
+    floor:[add(0,0,0),add(L,0,0),add(L,W,0),add(0,W,0)],
+    back:[add(0,0,0),add(L,0,0),add(L,0,H),add(0,0,H)],
+    left:[add(0,0,0),add(0,W,0),add(0,W,H),add(0,0,H)],
+    front:[add(0,W,0),add(L,W,0),add(L,W,H),add(0,W,H)],
+    right:[add(L,0,0),add(L,W,0),add(L,W,H),add(L,0,H)]
+  };
+  const pr = {
+    top:[add(0,0,ph),add(pl,0,ph),add(pl,pw,ph),add(0,pw,ph)],
+    fr:[add(0,pw,0),add(pl,pw,0),add(pl,pw,ph),add(0,pw,ph)],
+    rt:[add(pl,0,0),add(pl,pw,0),add(pl,pw,ph),add(pl,0,ph)]
+  };
+  const xs = pts.map(q=>q[0]), ys = pts.map(q=>q[1]);
+  const pad = 6, minx=Math.min(...xs)-pad, miny=Math.min(...ys)-pad, w=Math.max(...xs)-minx+pad, h=Math.max(...ys)-miny+pad;
+  const ink = "#1E1E1E";
+  let g = "";
+  g += poly(b.floor,"#D9BF98",ink) + poly(b.back,"#A8743F",ink) + poly(b.left,"#8F6234",ink);
+  if (fits(prod, box)) {
+    g += poly(pr.fr,"#3A3632",ink) + poly(pr.rt,"#2A2724",ink) + poly(pr.top,"#55504A",ink);
+  }
+  // parois avant/droite transparentes (traits)
+  g += poly(b.front,"rgba(168,116,63,.18)",ink,'stroke-dasharray="4 3"') + poly(b.right,"rgba(168,116,63,.12)",ink,'stroke-dasharray="4 3"');
+  return {vb:`${minx} ${miny} ${w} ${h}`, g};
+}
+function drawIso(svgEl, box, prod, s){
+  const r = iso(box, prod, {s});
+  svgEl.setAttribute("viewBox", r.vb);
+  svgEl.setAttribute("preserveAspectRatio","xMidYMid meet");
+  svgEl.innerHTML = r.g;
+}
+function isoSvg(box, prod, label){
+  const r = iso(box, prod, {s:4});
+  return `<svg viewBox="${r.vb}" role="img" aria-label="${esc(label)}">${r.g}</svg>`;
+}
+
+/* ---------- accueil ---------- */
+drawIso($("isoA"), [40,30,20], [24,14,14], 4);
+drawIso($("isoB"), [30,15,15], [24,14,14], 4);
+$("fmtGrid").innerHTML = FORMATS.map(f => {
+  const r = iso([f.L,f.W,f.H],[0,0,0],{s:4});
+  // échelle commune : même viewBox pour comparer les tailles
+  const ref = iso([30,20,20],[0,0,0],{s:4});
+  return `<div class="fmt"><svg viewBox="${ref.vb}" aria-hidden="true">${r.g}</svg><b>${f.name}</b><span>${f.L} × ${f.W} × ${f.H} cm intérieur</span><em>${f.use}</em></div>`;
+}).join("");
+document.addEventListener("click", ev => {
+  const b = ev.target.closest("[data-goto]");
+  if (!b) return;
+  const id = b.dataset.goto;
+  const go = () => { const el = $(id); if (el) el.scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"}); };
+  const inDiag = !!$("v-diagnostic").contains($(id));
+  const onDiag = location.hash === "#diagnostic";
+  if (inDiag !== onDiag) { location.hash = inDiag ? "#diagnostic" : "#accueil"; setTimeout(go, 60); } else go();
+});
+document.querySelectorAll("[data-scroll]").forEach(b => b.addEventListener("click", () => $(b.dataset.scroll).scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"})));
+
+/* ---------- routage ---------- */
+function route(){
+  const v = location.hash === "#diagnostic" ? "diagnostic" : "accueil";
+  document.querySelectorAll(".view").forEach(el => el.classList.toggle("on", el.id === "v-" + v));
+  document.querySelectorAll("[data-nav]").forEach(a => a.dataset.nav === v ? a.setAttribute("aria-current","page") : a.removeAttribute("aria-current"));
+  document.title = v === "diagnostic" ? "Diagnostic de vos colis | ModuPack" : "ModuPack, le carton qui s'ajuste à vos produits";
+  window.scrollTo(0,0);
+}
+addEventListener("hashchange", route);
+route();
+
+/* ---------- formulaire diagnostic ---------- */
+const boxBody = document.querySelector("#boxTbl tbody");
+const prodBody = document.querySelector("#prodTbl tbody");
+let boxId = 0;
+
+function addBox(d={}){
+  const id = "b" + (++boxId);
+  const tr = document.createElement("tr");
+  tr.dataset.id = id;
+  tr.innerHTML = `
+    <td><input aria-label="Nom du carton" class="bn" value="${esc(d.n ?? "Carton " + String.fromCharCode(64 + boxBody.children.length + 1))}"></td>
+    <td class="dim"><input aria-label="Longueur" type="number" min="0" step="0.1" class="bl" value="${d.l ?? ""}"></td>
+    <td class="dim"><input aria-label="Largeur" type="number" min="0" step="0.1" class="bw" value="${d.w ?? ""}"></td>
+    <td class="dim"><input aria-label="Hauteur" type="number" min="0" step="0.1" class="bh" value="${d.h ?? ""}"></td>
+    <td class="pr"><input aria-label="Prix HT" type="number" min="0" step="0.01" class="bp" value="${d.p ?? ""}" placeholder="0,91"></td>
+    <td><button type="button" class="del" aria-label="Supprimer ce carton">×</button></td>`;
+  tr.querySelector(".del").onclick = () => { tr.remove(); refreshSelects(); };
+  tr.querySelector(".bn").addEventListener("input", refreshSelects);
+  boxBody.appendChild(tr);
+  refreshSelects();
+}
+function boxOptions(){
+  return [...boxBody.children].map(tr => ({id:tr.dataset.id, n:tr.querySelector(".bn").value || "Carton"}));
+}
+function refreshSelects(){
+  const opts = boxOptions();
+  prodBody.querySelectorAll("select").forEach(s => {
+    const cur = s.value;
+    s.innerHTML = `<option value="auto">Le plus petit qui rentre</option>` + opts.map(o => `<option value="${o.id}">${esc(o.n)}</option>`).join("");
+    if ([...s.options].some(o => o.value === cur)) s.value = cur;
+  });
+}
+function addProd(d={}){
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td><input aria-label="Nom du produit" class="pn" value="${esc(d.n ?? "")}" placeholder="Vase"></td>
+    <td class="dim"><input aria-label="Longueur" type="number" min="0" step="0.1" class="pl" value="${d.l ?? ""}"></td>
+    <td class="dim"><input aria-label="Largeur" type="number" min="0" step="0.1" class="pw" value="${d.w ?? ""}"></td>
+    <td class="dim"><input aria-label="Hauteur" type="number" min="0" step="0.1" class="ph" value="${d.h ?? ""}"></td>
+    <td class="qty"><input aria-label="Colis par mois" type="number" min="0" step="1" class="pq" value="${d.q ?? ""}" placeholder="50"></td>
+    <td><select aria-label="Carton utilisé" class="pb"></select></td>
+    <td><button type="button" class="del" aria-label="Supprimer ce produit">×</button></td>`;
+  tr.querySelector(".del").onclick = () => tr.remove();
+  prodBody.appendChild(tr);
+  refreshSelects();
+  if (d.b) tr.querySelector("select").value = d.b;
+}
+$("addBox").onclick = () => addBox();
+$("addProd").onclick = () => addProd();
+function calLabel(){
+  const l = $("calMode").value === "litre";
+  $("calLbl").textContent = l ? "Coût du calage par litre (€)" : "Coût du calage par colis (€)";
+  $("calage").placeholder = l ? "0,015" : "0,20";
+}
+$("calMode").addEventListener("change", calLabel);
+
+function clearAll(){
+  boxBody.innerHTML = ""; prodBody.innerHTML = ""; boxId = 0;
+  ["shop","calage"].forEach(i => $(i).value = "");
+  $("mp").value = "1.15"; $("divisor").value = "5000"; $("calMode").value = "colis"; calLabel();
+  addBox(); addBox(); addProd(); addProd(); addProd();
+  $("results").classList.remove("on"); $("err").textContent = "";
+}
+$("reset").onclick = clearAll;
+$("demo").onclick = () => {
+  boxBody.innerHTML = ""; prodBody.innerHTML = ""; boxId = 0;
+  $("shop").value = "Atelier Lumière (exemple)";
+  $("calage").value = "0.20";
+  addBox({n:"Grand carton", l:40, w:30, h:20, p:1.60});
+  addBox({n:"Carton moyen", l:31, w:22, h:15, p:0.91});
+  addProd({n:"Lampe à poser", l:28, w:18, h:18, q:40});
+  addProd({n:"Vase", l:24, w:14, h:14, q:80});
+  addProd({n:"Coffret 3 bougies", l:25, w:15, h:10, q:90});
+  addProd({n:"Plaid plié", l:35, w:25, h:10, q:10});
+  addProd({n:"Mug", l:12, w:9, h:10, q:30});
+  diagnose();
+};
+
+/* ---------- calcul ---------- */
+let lastReport = "";
+function diagnose(e){
+  if (e) e.preventDefault();
+  const err = $("err"); err.textContent = "";
+  const boxes = [...boxBody.children].map(tr => ({
+    id:tr.dataset.id, n:tr.querySelector(".bn").value.trim() || "Carton",
+    d:[val(tr.querySelector(".bl")), val(tr.querySelector(".bw")), val(tr.querySelector(".bh"))],
+    p:val(tr.querySelector(".bp"))
+  })).filter(b => b.d.some(v => v !== null));
+  for (const b of boxes) if (b.d.some(v => !v || v <= 0)) { err.textContent = `« ${b.n} » : entrez la longueur, la largeur et la hauteur.`; return; }
+
+  const prods = [...prodBody.children].map(tr => ({
+    n:tr.querySelector(".pn").value.trim(),
+    d:[val(tr.querySelector(".pl")), val(tr.querySelector(".pw")), val(tr.querySelector(".ph"))],
+    q:val(tr.querySelector(".pq")), b:tr.querySelector(".pb").value
+  })).filter(p => p.n || p.d.some(v => v !== null));
+  if (!prods.length) { err.textContent = "Ajoutez au moins un produit avec ses trois dimensions."; return; }
+  for (const [i,p] of prods.entries()) {
+    if (!p.n) p.n = "Produit " + (i+1);
+    if (p.d.some(v => !v || v <= 0)) { err.textContent = `« ${p.n} » : entrez la longueur, la largeur et la hauteur.`; return; }
+    if (!p.q || p.q < 0) p.q = 1;
+  }
+
+  const calVal = val($("calage")) || 0, calMode = $("calMode").value, mp = val($("mp")) ?? 1.15, div = +$("divisor").value;
+  // coût du calage pour un produit dans un carton : par colis, ou par litre de vide à remplir
+  const calage = (box, prod) => calMode === "litre" ? (vol(box) - vol(prod)) / 1000 * calVal : calVal;
+  const rows = prods.map(p => {
+    let cur = null;
+    if (p.b !== "auto") cur = boxes.find(b => b.id === p.b) || null;
+    else cur = boxes.filter(b => fits(p.d, b.d)).sort((a,b) => vol(a.d) - vol(b.d))[0] || null;
+    const curFits = cur ? fits(p.d, cur.d) : false;
+    const rCur = cur && curFits ? vr(p.d, cur.d) : null;
+    const opts = FORMATS.map(f => ({...f, b:[f.L,f.W,f.H]})).filter(f => fits(p.d, f.b)).map(f => ({...f, r:vr(p.d, f.b)})).sort((a,b) => a.r - b.r);
+    const best = opts[0] || null;
+    let status;
+    if (!best) status = {k:"na", t:"Trop grand pour le M", tip:"Le format L est prévu dans la gamme."};
+    else if (best.r > .5) status = {k:"ko", t:"Trop petit pour le M", tip:"Même réglé au plus petit, le M laisse plus de 50 % de vide : ce produit est fait pour le ModuPack S."};
+    else status = {k:"ok", t:"Conforme avec ModuPack", tip:""};
+    return {...p, cur, curFits, rCur, best, status};
+  });
+
+  const totalQ = rows.reduce((s,r) => s + r.q, 0);
+  const okNow = rows.filter(r => r.rCur !== null && r.rCur <= .5).reduce((s,r) => s + r.q, 0);
+  const okMod = rows.reduce((s,r) => {
+    const modOk = r.best && r.best.r <= .5;
+    const nowOk = r.rCur !== null && r.rCur <= .5;
+    return s + ((modOk || nowOk) ? r.q : 0);
+  }, 0);
+  const switched = rows.filter(r => r.best && r.best.r <= .5 && (r.rCur === null || r.best.r < r.rCur));
+
+  // économies sur les produits qui passent en ModuPack
+  let volCur = 0, volMod = 0, wCur = 0, wMod = 0, money = 0, moneyKnown = true;
+  let calL = 0, calEur = 0, cartBefore = 0, cartAfter = 0, nColis = 0;
+  switched.forEach(r => {
+    if (!r.cur) return;
+    volCur += vol(r.cur.d) * r.q; volMod += vol(r.best.b) * r.q;
+    wCur += vol(r.cur.d) / div * r.q; wMod += vol(r.best.b) / div * r.q;
+    const c = calage(r.cur.d, r.d);
+    calL += (vol(r.cur.d) - vol(r.d)) / 1000 * r.q;
+    calEur += c * r.q;
+    nColis += r.q;
+    if (r.cur.p === null) moneyKnown = false;
+    else { cartBefore += r.cur.p * r.q; cartAfter += mp * r.q; money += (r.cur.p + c - mp) * r.q; }
+  });
+
+  // affichage
+  const shop = $("shop").value.trim();
+  $("resTitle").textContent = shop ? `Diagnostic : ${shop}` : "Votre diagnostic";
+  const pNow = totalQ ? okNow / totalQ : 0, pMod = totalQ ? okMod / totalQ : 0;
+  $("sNow").textContent = fr(pNow*100) + " %"; $("bNow").style.width = pNow*100 + "%";
+  $("sMod").textContent = fr(pMod*100) + " %"; $("bMod").style.width = pMod*100 + "%";
+  $("pNow").textContent = `${fr(okNow)} colis sur ${fr(totalQ)} par mois respectent la limite.`;
+  $("pMod").textContent = `${fr(okMod)} colis sur ${fr(totalQ)} par mois respectent la limite.`;
+
+  const k = [];
+  k.push(`<div><b>${switched.length} / ${rows.length}</b><span>produits à passer en ModuPack M</span></div>`);
+  k.push(`<div><b>${volCur ? "−" + fr((1 - volMod/volCur)*100) + " %" : "—"}</b><span>de volume de colis pour ces produits</span></div>`);
+  k.push(`<div><b>${wCur ? fr(wCur - wMod) + " kg" : "—"}</b><span>de poids volumétrique en moins par mois</span></div>`);
+  if (!calVal || !moneyKnown) k.push(`<div><b>—</b><span>d'économie par mois : renseignez le prix de vos cartons et le coût du calage</span></div>`);
+  else k.push(`<div><b>${money >= 0 ? "+" : "−"}${eur(Math.abs(money))}</b><span>${money >= 0 ? "économisés" : "de surcoût"} par mois sur carton + calage</span></div>`);
+  $("kpis").innerHTML = k.join("");
+
+  // calage économisé + incidence sur les coûts
+  let imp = "";
+  if (!nColis) {
+    imp = `<div class="calbox" style="grid-column:1/-1"><p>Aucun produit ne passe en ModuPack M : pas de calage économisé avec ce modèle.</p></div>`;
+  } else {
+    const calTxt = calMode === "litre" ? `${fr(calVal,3)} € par litre de calage` : `${eur(calVal)} de calage par colis`;
+    imp += `<div class="calbox">
+      <h2>Calage économisé</h2>
+      <div class="big">${fr(calL)} L</div>
+      <p>de calage en moins chaque mois, soit environ ${fr(calL / nColis, 1)} L par colis, sur ${fr(nColis)} colis.</p>
+      <p>Sur un an : <b>${fr(calL * 12 / 1000, 1)} m³</b> de papier, de kraft ou de coussins d'air que vous n'achetez plus et que vos clients ne jettent plus.</p>
+      ${calVal ? `<p class="eq">${eur(calEur)} de calage en moins par mois (${calTxt}).</p>` : `<p class="eq">Renseignez le coût de votre calage en haut de page pour voir l'économie en euros.</p>`}
+    </div>`;
+    if (moneyKnown && calVal) {
+      const before = cartBefore + calEur, after = cartAfter, diff = before - after;
+      const cell = x => x === 0 ? "—" : `<span class="${x > 0 ? "g" : "r"}">${x > 0 ? "−" : "+"}${eur(Math.abs(x))}</span>`;
+      imp += `<div>
+        <h2>Incidence sur vos coûts</h2>
+        <p class="hint" style="margin-bottom:12px">Par mois, pour les ${fr(nColis)} colis qui passent en ModuPack.</p>
+        <table class="money">
+          <thead><tr><th></th><th>Aujourd'hui</th><th>Avec ModuPack</th><th>Différence</th></tr></thead>
+          <tbody>
+            <tr><td>Cartons</td><td>${eur(cartBefore)}</td><td>${eur(cartAfter)}</td><td>${cell(cartBefore - cartAfter)}</td></tr>
+            <tr><td>Calage</td><td>${eur(calEur)}</td><td>${eur(0)}</td><td>${cell(calEur)}</td></tr>
+            <tr class="tot"><td>Total emballage</td><td>${eur(before)}</td><td>${eur(after)}</td><td>${cell(diff)}</td></tr>
+          </tbody>
+        </table>
+        <p class="small">Par colis : ${eur(before / nColis)} aujourd'hui, ${eur(after / nColis)} avec ModuPack.</p>
+        <div class="year"><span>${diff >= 0 ? "Économie" : "Surcoût"} sur un an</span><b>${eur(Math.abs(diff) * 12)}</b></div>
+        <p class="small">Sans compter le transport : vos colis pèsent ${fr(wCur - wMod)} kg de poids volumétrique en moins par mois. L'effet sur votre facture dépend des tarifs de votre transporteur.</p>
+      </div>`;
+    } else {
+      imp += `<div><h2>Incidence sur vos coûts</h2><p class="hint">Renseignez le prix HT de chacun de vos cartons et le coût de votre calage pour voir l'effet sur votre budget emballage.</p></div>`;
+    }
+  }
+  $("impact").innerHTML = imp;
+
+  const tb = $("resTbl").querySelector("tbody");
+  tb.innerHTML = rows.map((r,i) => {
+    const now = r.rCur === null ? `<span class="pill na">${r.cur ? "Ne rentre pas" : "Aucun carton"}</span>` :
+      `<span class="pct" style="color:${r.rCur <= .5 ? "var(--ok)" : "var(--cut)"}">${fr(r.rCur*100)} %</span>`;
+    const mod = r.best ? `<span class="pct" style="color:${r.best.r <= .5 ? "var(--ok)" : "var(--cut)"}">${fr(r.best.r*100)} %</span>` : "—";
+    return `<tr data-i="${i}" tabindex="0">
+      <td><b>${esc(r.n)}</b><br><span style="color:var(--ink-soft);font-size:.86rem">${r.d.map(v=>fr(v,1)).join(" × ")} cm</span></td>
+      <td>${fr(r.q)}</td>
+      <td>${r.cur ? esc(r.cur.n) : "—"}</td>
+      <td>${now}</td>
+      <td>${r.best ? r.best.name : "—"}</td>
+      <td>${mod}</td>
+      <td><span class="pill ${r.status.k}">${r.status.t}</span></td></tr>`;
+  }).join("");
+  const select = i => {
+    tb.querySelectorAll("tr").forEach(tr => tr.classList.toggle("sel", +tr.dataset.i === i));
+    showDetail(rows[i], calage, mp, div, calVal);
+  };
+  tb.querySelectorAll("tr").forEach(tr => {
+    tr.onclick = () => select(+tr.dataset.i);
+    tr.onkeydown = ev => { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); select(+tr.dataset.i); } };
+  });
+  const first = rows.findIndex(r => r.status.k === "ok" && r.rCur !== null);
+  select(first >= 0 ? first : 0);
+
+  // fiche
+  const d = new Date().toLocaleDateString("fr-FR");
+  let rep = `FICHE DE CALCUL DU TAUX DE VIDE (indicative)\n${shop || "Boutique"}, le ${d}\n\n`;
+  rep += `Colis conformes aujourd'hui : ${fr(pNow*100)} % (${fr(okNow)} / ${fr(totalQ)} par mois)\n`;
+  rep += `Colis conformes avec ModuPack : ${fr(pMod*100)} % (${fr(okMod)} / ${fr(totalQ)} par mois)\n\n`;
+  rows.forEach(r => {
+    rep += `• ${r.n} (${r.d.map(v=>fr(v,1)).join(" × ")} cm, ${fr(r.q)} colis/mois)\n`;
+    rep += `   Aujourd'hui : ${r.cur ? r.cur.n : "aucun carton"}${r.rCur !== null ? " → " + fr(r.rCur*100,1) + " % de vide" + (r.rCur <= .5 ? " (conforme)" : " (non conforme)") : ""}\n`;
+    rep += r.best ? `   ModuPack M ${r.best.name} → ${fr(r.best.r*100,1)} % de vide${r.best.r <= .5 ? " (conforme)" : " (non conforme : voir ModuPack S)"}\n` : `   Trop grand pour le ModuPack M : voir ModuPack L\n`;
+  });
+  if (nColis) {
+    rep += `\nCalage économisé : ${fr(calL)} L par mois (${fr(calL * 12 / 1000, 1)} m³ par an)\n`;
+    if (moneyKnown && calVal) {
+      const before = cartBefore + calEur, diff = before - cartAfter;
+      rep += `Emballage (carton + calage) pour ces ${fr(nColis)} colis : ${eur(before)} → ${eur(cartAfter)} par mois\n`;
+      rep += `${diff >= 0 ? "Économie" : "Surcoût"} : ${eur(Math.abs(diff))} par mois, ${eur(Math.abs(diff) * 12)} par an\n`;
+    }
+  }
+  rep += `\nRéférence : 50 % de vide maximum, règlement (UE) 2025/40 (PPWR), art. 24, à partir du 1er janvier 2030.\nCalcul indicatif : la méthode officielle de la Commission n'est pas encore publiée.`;
+  lastReport = rep;
+  $("rep").textContent = rep; $("rep").style.display = "none";
+  $("results").classList.add("on");
+  $("results").scrollIntoView({behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth"});
+}
+
+function showDetail(r, calageFn, mp, div, calVal){
+  const box = r.cur && r.curFits ? r.cur.d : null;
+  const left = box ? `<figure>${isoSvg(box, r.d, "Produit dans le carton actuel")}<figcaption><b style="color:${r.rCur <= .5 ? "var(--ok)" : "var(--cut)"}">${fr(r.rCur*100)} % de vide</b>Aujourd'hui : ${esc(r.cur.n)}</figcaption></figure>`
+    : `<figure><figcaption><b>—</b>Aucun carton actuel ne contient ce produit.</figcaption></figure>`;
+  const right = r.best ? `<figure>${isoSvg(r.best.b, r.d, "Produit dans le ModuPack conseillé")}<figcaption><b style="color:${r.best.r <= .5 ? "var(--ok)" : "var(--cut)"}">${fr(r.best.r*100)} % de vide</b>ModuPack M ${r.best.name}</figcaption></figure>`
+    : `<figure><figcaption><b>—</b>Trop grand pour le M.</figcaption></figure>`;
+  const li = [];
+  li.push(["Volume du produit", fr(vol(r.d)/1000,2) + " L"]);
+  if (box) li.push(["Vide à caler aujourd'hui", fr((vol(box)-vol(r.d))/1000,1) + " L par colis"]);
+  if (r.best) li.push(["Vide avec ModuPack", fr((vol(r.best.b)-vol(r.d))/1000,1) + " L par colis"]);
+  if (box && r.best) li.push(["Poids volumétrique", `${fr(vol(box)/div,2)} kg → ${fr(vol(r.best.b)/div,2)} kg`]);
+  if (box && r.best && r.best.r <= .5) {
+    li.push(["Calage économisé", `${fr((vol(box)-vol(r.d))/1000*r.q)} L par mois`]);
+    if (calVal) li.push(["Coût du calage par colis", `${eur(calageFn(box, r.d))} → 0,00 €`]);
+  }
+  if (box && r.best && r.cur.p !== null && r.best.r <= .5 && calVal) {
+    const c = calageFn(box, r.d), diff = r.cur.p + c - mp;
+    li.push(["Carton + calage par colis", `${eur(r.cur.p + c)} → ${eur(mp)}`]);
+    li.push([diff >= 0 ? "Économie par mois" : "Surcoût par mois", eur(Math.abs(diff) * r.q)]);
+  }
+  $("detail").innerHTML = `
+    <div>
+      <h3>${esc(r.n)}</h3>
+      <p style="color:var(--ink-soft);margin-bottom:6px">${r.d.map(v=>fr(v,1)).join(" × ")} cm, ${fr(r.q)} colis par mois</p>
+      ${r.status.tip ? `<p style="font-weight:600">${r.status.tip}</p>` : (r.best ? `<p style="font-weight:600">Réglage conseillé : ${r.best.name}.</p>` : "")}
+      <ul>${li.map(([a,b]) => `<li><span>${a}</span><span>${b}</span></li>`).join("")}</ul>
+    </div>
+    <div class="vs">${left}${right}</div>`;
+}
+
+$("diag").addEventListener("submit", diagnose);
+$("showRep").onclick = () => { const r = $("rep"); r.style.display = r.style.display === "block" ? "none" : "block"; };
+$("copyRep").onclick = async ev => {
+  try { await navigator.clipboard.writeText(lastReport); ev.target.textContent = "Fiche copiée"; }
+  catch { $("rep").style.display = "block"; ev.target.textContent = "Sélectionnez la fiche ci-dessous"; }
+};
+$("samples").onclick = ev => { ev.preventDefault(); $("contactBlock").scrollIntoView({behavior:"smooth"}); $("mail").focus({preventScroll:true}); };
+$("contact").addEventListener("submit", ev => { ev.preventDefault(); if (!$("mail").checkValidity()) { $("mail").reportValidity(); return; } $("thanks").style.display = "block"; ev.target.querySelector("button").textContent = "Demande enregistrée"; });
+
+clearAll();
+</script>
+</body>
+</html>
